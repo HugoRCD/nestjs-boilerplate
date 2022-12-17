@@ -63,6 +63,13 @@ export class UserService {
     return `This action updates a #${id} user`;
   }
 
+  async updatePassword(id: number, password: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    user.password = password;
+    await this.userRepository.save(user);
+    return user;
+  }
+
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
