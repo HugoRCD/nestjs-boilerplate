@@ -45,8 +45,10 @@ export class UserService {
     return this.userRepository.update(id, { refreshToken: null });
   }
 
-  getUserById(id: number) {
-    return this.userRepository.findOne({ where: { id } });
+  async getUserById(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new BadRequestException("user_not_found");
+    return user;
   }
 
   getUserByLogin(login: string) {
