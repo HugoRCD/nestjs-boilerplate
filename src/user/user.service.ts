@@ -35,6 +35,10 @@ export class UserService {
     return user;
   }
 
+  getUserById(id: number) {
+    return this.userRepository.findOne({ where: { id } });
+  }
+
   getUserByLogin(login: string) {
     return this.userRepository.findOne({
       where: [{ username: login }, { email: login }],

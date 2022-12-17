@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Res } from "@nestjs/common";
+import { Body, Controller, Post, Req, Res } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
+import { Request } from "express";
 
 @Controller("auth")
 export class AuthController {
@@ -23,5 +24,10 @@ export class AuthController {
   ) {
     const user = await this.authService.validateUser(login, password);
     return this.authService.getTokens(user, response);
+  }
+
+  @Post("refresh")
+  async refresh(@Req() request: Request, @Res({ passthrough: true }) response) {
+    return this.authService.refreshToken(request, response);
   }
 }

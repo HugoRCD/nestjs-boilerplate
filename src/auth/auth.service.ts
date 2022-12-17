@@ -47,6 +47,19 @@ export class AuthService {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
+    response.status(200);
     return { accessToken };
+  }
+
+  async refreshToken(request, response) {
+    const refreshToken = request.cookies.refreshToken;
+    const payload = await this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
+    });
+    const user = await this.userService.getUserById(payload.id);
+    response.status(200);
+    return {
+      accessToken: await this.createAccessToken(user),
+    };
   }
 }
