@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { IsAlpha, IsEmail, IsNotEmpty } from "class-validator";
 
 @Entity()
 export class User {
@@ -14,15 +15,19 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @IsAlpha()
   @Column()
   firstname: string;
 
+  @IsAlpha()
   @Column()
   lastname: string;
 
+  @IsEmail()
   @Column({ unique: true })
   email: string;
 
+  @IsNotEmpty()
   @Column()
   password: string;
 
