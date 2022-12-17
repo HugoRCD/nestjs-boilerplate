@@ -22,7 +22,7 @@ export class AuthService {
 
   async validateUser(login: string, password: string) {
     const user = await this.userService.getUserByLogin(login);
-    if (!user || !(await utils.deHash(password, user.password))) {
+    if (!user || !(await utils.decrypt(password, user.password))) {
       throw new BadRequestException("invalid_credentials");
     }
     return user;
@@ -47,11 +47,13 @@ export class AuthService {
   async getTokens(user, response) {
     const accessToken = await this.createAccessToken(user);
     const refreshToken = await this.createRefreshToken(user);
-    response.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
-    response.status(200);
+    await this.userService.insertRefreshToken(user.id, refreshToken);
+    response
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      })
+      .status(200);
     return { accessToken };
   }
 
@@ -64,9 +66,30 @@ export class AuthService {
       secret: this.configService.get("REFRESH_TOKEN_SECRET"),
     });
     const user = await this.userService.getUserById(payload.id);
+    const decryptedRefreshToken = utils.decrypt(
+      refreshToken,
+      user.refreshToken,
+    );
+    if (decryptedRefreshToken) {
+      response.status(200);
+      return {
+        accessToken: await this.createAccessToken(user),
+      };
+    }
+    throw new UnauthorizedException("invalid_refresh_token");
+  }
+
+  async logout(request, response) {
+    const refreshToken = request.cookies.refreshToken;
+    if (!refreshToken) {
+      throw new UnauthorizedException("refresh_token_not_provided");
+    }
+    const payload = await this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
+    });
+    await this.userService.removeRefreshToken(payload.id);
+    response.clearCookie("refreshToken");
     response.status(200);
-    return {
-      accessToken: await this.createAccessToken(user),
-    };
+    return { message: "success" };
   }
 }

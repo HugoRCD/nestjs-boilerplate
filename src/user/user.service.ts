@@ -25,7 +25,7 @@ export class UserService {
     if (findUser) {
       throw new BadRequestException("user_already_exists");
     }
-    const hashedPassword = await utils.hash(createUserDto.password);
+    const hashedPassword = await utils.encrypt(createUserDto.password);
     const user = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
@@ -33,6 +33,16 @@ export class UserService {
     await this.userRepository.save(user);
     await this.mailingService.sendNewUser(user);
     return user;
+  }
+
+  async insertRefreshToken(id: number, refreshToken: string) {
+    const userToInsert = await this.userRepository.findOne({ where: { id } });
+    userToInsert.refreshToken = await utils.encrypt(refreshToken);
+    await this.userRepository.save(userToInsert);
+  }
+
+  removeRefreshToken(id: number) {
+    return this.userRepository.update(id, { refreshToken: null });
   }
 
   getUserById(id: number) {
