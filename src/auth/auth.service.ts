@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { utils } from "../utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
@@ -53,6 +57,9 @@ export class AuthService {
 
   async refreshToken(request, response) {
     const refreshToken = request.cookies.refreshToken;
+    if (!refreshToken) {
+      throw new UnauthorizedException("refresh_token_not_provided");
+    }
     const payload = await this.jwtService.verifyAsync(refreshToken, {
       secret: this.configService.get("REFRESH_TOKEN_SECRET"),
     });

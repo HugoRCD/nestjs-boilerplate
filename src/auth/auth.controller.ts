@@ -26,6 +26,13 @@ export class AuthController {
     return this.authService.getTokens(user, response);
   }
 
+  @Post("logout")
+  async logout(@Res({ passthrough: true }) response) {
+    response.clearCookie("refreshToken");
+    response.status(200);
+    return { message: "success" };
+  }
+
   @Post("refresh")
   async refresh(@Req() request: Request, @Res({ passthrough: true }) response) {
     return this.authService.refreshToken(request, response);
