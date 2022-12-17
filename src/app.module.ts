@@ -8,6 +8,7 @@ import { MailingModule } from "./mailing/mailing.module";
 import { CronModule } from "./cron/cron.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
+import { AuthModule } from "./auth/auth.module";
 
 /*const domains = [
   "http://localhost:8080",
@@ -36,6 +37,7 @@ import { join } from "path";
     UserModule,
     MailingModule,
     CronModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
