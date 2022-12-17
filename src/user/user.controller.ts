@@ -7,8 +7,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
+  @Get(":id")
+  getUserById(@Param("id") id: number) {
+    return this.userService.getUserById(id);
   }
 
   @Patch(":id")

@@ -55,7 +55,7 @@ export class UserService {
     });
   }
 
-  findAll() {
+  getAllUsers() {
     return this.userRepository.find();
   }
 

@@ -9,12 +9,7 @@ import { CronModule } from "./cron/cron.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
 import { AuthModule } from "./auth/auth.module";
-
-/*const domains = [
-  "http://localhost:8080",
-  "http://localhost:3000",
-  "https://vuejs-frontend-template.herokuapp.com",
-];*/
+import { ResetPasswordModule } from "./reset-password/reset-password.module";
 
 @Module({
   imports: [
@@ -38,6 +33,7 @@ import { AuthModule } from "./auth/auth.module";
     MailingModule,
     CronModule,
     AuthModule,
+    ResetPasswordModule,
   ],
   controllers: [AppController],
   providers: [AppService],
