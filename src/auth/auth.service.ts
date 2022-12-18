@@ -7,6 +7,8 @@ import { UserService } from "../user/user.service";
 import { utils } from "../utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { OAuth2Client } from "google-auth-library";
+import { User } from "../user/entities/user.entity";
 
 interface JwtPayload {
   id: number;
@@ -91,5 +93,30 @@ export class AuthService {
     response.clearCookie("refreshToken");
     response.status(200);
     return { message: "success" };
+  }
+
+  async googleAuth(token, response) {
+    const client = new OAuth2Client(this.configService.get("GOOGLE_CLIENT_ID"));
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: this.configService.get("GOOGLE_CLIENT_ID"),
+    });
+    const payload = ticket.getPayload();
+    if (!payload) {
+      throw new UnauthorizedException("invalid_google_token");
+    }
+    const user = await this.userService.getUserByLogin(payload.email);
+    if (user) {
+      return this.getTokens(user, response);
+    } else {
+      const newUser = new User();
+      newUser.username = payload.given_name + " " + payload.family_name;
+      newUser.email = payload.email;
+      newUser.firstname = payload.given_name;
+      newUser.lastname = payload.family_name;
+      newUser.password = await utils.encrypt(token);
+      const createdUser = await this.userService.create(newUser);
+      return this.getTokens(createdUser, response);
+    }
   }
 }

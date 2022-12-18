@@ -35,4 +35,12 @@ export class AuthController {
   async refresh(@Req() request: Request, @Res({ passthrough: true }) response) {
     return this.authService.refreshToken(request, response);
   }
+
+  @Post("google")
+  async googleAuth(
+    @Body("token") token: string,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.googleAuth(token, response);
+  }
 }
