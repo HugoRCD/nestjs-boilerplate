@@ -33,7 +33,7 @@ Now you can open the app in your browser at http://localhost:3000. You can use a
 Here is the [Postman Collection](./postman)
 
 ## Documentation
-For more information on how to use this NestJS api, see the [documentation](./docs) or http://localhost:3000/api.
+For more information on how to use this NestJS api, see the [documentation](https://nestjs-backend-template.herokuapp.com/api) or http://localhost:3000/api.
 
 ## License
 This NestJS template is licensed under the [MIT License](./LICENSE).
