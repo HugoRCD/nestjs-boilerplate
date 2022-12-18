@@ -1,7 +1,8 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as cookieParser from "cookie-parser";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ClassSerializerInterceptor } from "@nestjs/common";
 
 const domains = [
   "http://localhost:8080",
@@ -12,6 +13,7 @@ const domains = [
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.enableCors({
     origin: domains,
     credentials: true,
