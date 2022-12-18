@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as cookieParser from "cookie-parser";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 const domains = [
   "http://localhost:8080",
@@ -15,6 +16,14 @@ async function bootstrap() {
     origin: domains,
     credentials: true,
   });
+  const config = new DocumentBuilder()
+    .setTitle("NestJS Template")
+    .setDescription("The NestJS Template API documentation")
+    .setVersion("1.0")
+    .addTag("nestjs-template")
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api", app, document);
   await app.listen(3000);
 }
 bootstrap().then(() => console.log("Server is running on port 3000"));

@@ -30,6 +30,7 @@
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.1.0",
+    "@nestjs/swagger": "^6.1.4",
     "@nestjs/typeorm": "^8.0.3",
     "@types/cron": "^2.0.0",
     "@types/passport-jwt": "^3.0.8",
