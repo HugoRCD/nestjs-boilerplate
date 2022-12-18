@@ -25,17 +25,17 @@ export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
   @Get()
-  getTickets() {
+  async getTickets() {
     return this.ticketService.getTickets();
   }
 
   @Get(":id")
-  getTicket(@Param("id") id: number) {
+  async getTicket(@Param("id") id: number) {
     return this.ticketService.getTicket(id);
   }
 
   @Post()
-  createTicket(
+  async createTicket(
     @Body() ticket: TicketCreateInput,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -43,12 +43,15 @@ export class TicketController {
   }
 
   @Patch(":id")
-  updateTicket(@Param("id") id: number, @Body() ticket: TicketUpdateInput) {
+  async updateTicket(
+    @Param("id") id: number,
+    @Body() ticket: TicketUpdateInput,
+  ) {
     return this.ticketService.updateTicket(id, ticket);
   }
 
   @Delete(":id")
-  deleteTicket(@Param("id") id: number) {
+  async deleteTicket(@Param("id") id: number) {
     return this.ticketService.deleteTicket(id);
   }
 }
