@@ -10,7 +10,7 @@ import { ConfigService } from "@nestjs/config";
 import { OAuth2Client } from "google-auth-library";
 import { User } from "../user/entities/user.entity";
 
-interface JwtPayload {
+export interface JwtPayload {
   id: number;
 }
 

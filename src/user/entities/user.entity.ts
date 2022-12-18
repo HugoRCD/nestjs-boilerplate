@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { IsAlpha, IsEmail, IsNotEmpty } from "class-validator";
+import { IsAlpha, IsEmail } from "class-validator";
+import { Role } from "../../auth/decorators/role.decorator";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User {
@@ -27,13 +29,21 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @IsNotEmpty()
+  @Exclude({ toPlainOnly: true })
   @Column()
   password: string;
 
-  @Column({ length: 600, nullable: true })
+  @Exclude({ toPlainOnly: true })
+  @Column({ length: 600, nullable: true, select: false })
   refreshToken: string;
 
+  @Column({ default: Role.USER })
+  role: number;
+
+  @Column({ default: false })
+  isVerified: boolean;
+
+  @Column({ default: false })
   @CreateDateColumn()
   createdAt: Date;
 
