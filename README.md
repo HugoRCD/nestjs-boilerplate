@@ -14,7 +14,7 @@ Everything is connect and ready to use to a working app in VueJS check here !!! 
 - Fully fonctionnal mailer with responsive mail template
 
 ## Getting Started
-To get started with My VueJS App, follow these steps:
+To get started with this NestJS Api, follow these steps:
 
 ### Clone the repository:
 ```
