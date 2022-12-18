@@ -20,28 +20,31 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getCurrentUser(@CurrentUser() user: User) {
+  async getCurrentUser(@CurrentUser() user: User) {
     return this.userService.getUserById(user.id);
   }
 
   @Roles(Role.ADMIN)
   @Get("/all")
-  getAllUsers() {
+  async getAllUsers() {
     return this.userService.getAllUsers();
   }
 
   @Get(":id")
-  getUserById(@Param("id") id: number) {
+  async getUserById(@Param("id") id: number) {
     return this.userService.getUserById(id);
   }
 
   @Patch(":id")
-  update(@Param("id") id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  async updateUser(
+    @Param("id") id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   @Delete(":id")
-  remove(@Param("id") id: number) {
-    return this.userService.remove(+id);
+  async deleteUser(@Param("id") id: number) {
+    return this.userService.deleteUser(id);
   }
 }

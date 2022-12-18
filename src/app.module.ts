@@ -9,6 +9,7 @@ import { CronModule } from "./cron/cron.module";
 import { AuthModule } from "./auth/auth.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
 import { DatabaseModule } from "./database/database.module";
+import { TicketModule } from "./ticket/ticket.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DatabaseModule } from "./database/database.module";
     CronModule,
     AuthModule,
     ResetPasswordModule,
+    TicketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

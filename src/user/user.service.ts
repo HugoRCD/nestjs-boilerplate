@@ -41,8 +41,8 @@ export class UserService {
     await this.userRepository.save(userToInsert);
   }
 
-  removeRefreshToken(id: number) {
-    return this.userRepository.update(id, { refreshToken: null });
+  async removeRefreshToken(id: number) {
+    return await this.userRepository.update(id, { refreshToken: null });
   }
 
   async getUserById(id: number) {
@@ -51,18 +51,22 @@ export class UserService {
     return user;
   }
 
-  getUserByLogin(login: string) {
+  async getUserByLogin(login: string) {
     return this.userRepository.findOne({
       where: [{ username: login }, { email: login }],
     });
   }
 
-  getAllUsers() {
+  async getAllUsers() {
     return this.userRepository.find();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    console.log(user);
+    if (!user) throw new BadRequestException("user_not_found");
+    await this.userRepository.update(id, updateUserDto);
+    return { message: "user_updated" };
   }
 
   async updatePassword(id: number, password: string) {
@@ -72,7 +76,10 @@ export class UserService {
     return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deleteUser(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new BadRequestException("user_not_found");
+    await this.userRepository.delete(id);
+    return { message: "user_deleted" };
   }
 }
