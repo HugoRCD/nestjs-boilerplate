@@ -42,13 +42,13 @@ export class TicketController {
     return this.ticketService.createTicket(ticket, user);
   }
 
-  @Delete(":id")
-  deleteTicket(@Param("id") id: number) {
-    return this.ticketService.deleteTicket(id);
-  }
-
   @Patch(":id")
   updateTicket(@Param("id") id: number, @Body() ticket: TicketUpdateInput) {
     return this.ticketService.updateTicket(id, ticket);
+  }
+
+  @Delete(":id")
+  deleteTicket(@Param("id") id: number) {
+    return this.ticketService.deleteTicket(id);
   }
 }
