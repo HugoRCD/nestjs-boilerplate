@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/71db8a259f59414db7fda9f8e16a2411)](https://www.codacy.com/gh/HugoRCD/nestjs-boilerplate/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HugoRCD/nestjs-boilerplate&amp;utm_campaign=Badge_Grade)
+
 # Introduction
 Here is a completely working NestJS Template ! This backend is a Node.js server built with NestJS and can be used to serve the API for a web or mobile application.
 Everything is connect and ready to use to a working app in VueJS check here !!! [VueJS Template](https://github.com/HugoRCD/vuejs-boilerplate)
