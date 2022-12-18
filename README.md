@@ -33,7 +33,7 @@ Now you can open the app in your browser at http://localhost:3000. You can use a
 Here is the [Postman Collection](./postman)
 
 ## Documentation
-For more information on how to use My VueJS App, see the [documentation](./docs).
+For more information on how to use this Nest api, see the [documentation](./docs).
 
 ## License
 This NestJS template is licensed under the [MIT License](./LICENSE).
