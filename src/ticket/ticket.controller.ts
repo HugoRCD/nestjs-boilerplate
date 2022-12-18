@@ -15,9 +15,11 @@ import { Role, Roles } from "../auth/decorators/role.decorator";
 import { TicketUpdateInput } from "./dto/ticket-update.input";
 import { JwtPayload } from "../auth/auth.service";
 import { TicketCreateInput } from "./dto/ticket-create.input";
+import { ApiTags } from "@nestjs/swagger";
 
 @Roles(Role.ADMIN)
 @UseGuards(JwtAuthGuard, RoleGuard)
+@ApiTags("Ticket")
 @Controller("ticket")
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}

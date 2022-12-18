@@ -22,7 +22,6 @@ async function bootstrap() {
     .setTitle("NestJS Template")
     .setDescription("The NestJS Template API documentation")
     .setVersion("1.0")
-    .addTag("nestjs-template")
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);

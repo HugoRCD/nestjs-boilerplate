@@ -13,7 +13,9 @@ import { CurrentUser, JwtAuthGuard } from "../auth/guards/jwt.guard";
 import { User } from "./entities/user.entity";
 import { RoleGuard } from "../auth/guards/role.guard";
 import { Role, Roles } from "../auth/decorators/role.decorator";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("User")
 @UseGuards(JwtAuthGuard, RoleGuard)
 @Controller("user")
 export class UserController {
