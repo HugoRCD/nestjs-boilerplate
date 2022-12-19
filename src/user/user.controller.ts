@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   UseGuards,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
@@ -35,6 +36,19 @@ export class UserController {
   @Get(":id")
   async getUserById(@Param("id") id: number) {
     return this.userService.getUserById(id);
+  }
+
+  @Post("verify")
+  async sendNewToken(@Body("email") email: string) {
+    await this.userService.createVerificationUrl(email, true);
+    return {
+      message: "new_token_sent",
+    };
+  }
+
+  @Post("/verify/:token")
+  async verifyUser(@CurrentUser() user: User, @Param("token") token: string) {
+    return this.userService.verifyEmail(user.id, token);
   }
 
   @Patch(":id")

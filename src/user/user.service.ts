@@ -6,13 +6,18 @@ import { MailingService } from "../mailing/mailing.service";
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { utils } from "../utils/bcrypt";
+import { VerifCode } from "./entities/verif-code.entity";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(VerifCode)
+    private verifCodeRepository: Repository<VerifCode>,
     private mailingService: MailingService,
+    private configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -31,7 +36,8 @@ export class UserService {
       password: hashedPassword,
     });
     await this.userRepository.save(user);
-    await this.mailingService.sendNewUser(user);
+    const url = await this.createVerificationUrl(user.email, false);
+    await this.mailingService.sendNewUser(user, url);
     return user;
   }
 
@@ -80,5 +86,38 @@ export class UserService {
     if (!user) throw new BadRequestException("user_not_found");
     await this.userRepository.delete(id);
     return { message: "user_deleted" };
+  }
+
+  async createVerificationUrl(email: string, sendMail: boolean) {
+    const verif_code = new VerifCode();
+    verif_code.email = email;
+    verif_code.code = Math.floor(100000 + Math.random() * 900000).toString();
+    const verifCode = this.verifCodeRepository.create(verif_code);
+    await this.verifCodeRepository.save(verifCode);
+    const user = await this.userRepository.findOne({ where: { email: email } });
+    const verifyUrl = `${this.configService.get(
+      "FRONTEND_URL",
+    )}/account/verify/${verifCode.code}`;
+    if (sendMail) {
+      await this.mailingService.sendNewVerification(user, verifyUrl);
+    }
+    return verifyUrl;
+  }
+
+  async verifyEmail(id: number, code: string) {
+    const userToVerify = await this.userRepository.findOne({ where: { id } });
+    const verifCode = await this.verifCodeRepository.findOne({
+      where: { code: code, email: userToVerify.email },
+    });
+    if (verifCode && verifCode.code === code) {
+      userToVerify.isVerified = true;
+      await this.userRepository.save(userToVerify);
+      await this.verifCodeRepository.delete({ email: userToVerify.email });
+      return {
+        message: "email_verified",
+      };
+    } else {
+      throw new BadRequestException("invalid_code");
+    }
   }
 }

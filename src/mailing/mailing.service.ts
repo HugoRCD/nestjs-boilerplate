@@ -4,8 +4,7 @@ import { User } from "../user/entities/user.entity";
 @Injectable()
 export class MailingService {
   constructor(private readonly mailerService: MailerService) {}
-  async sendNewVerifCode(user: User): Promise<void> {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+  async sendNewVerification(user: User, url: string): Promise<void> {
     await this.mailerService
       .sendMail({
         to: user.email,
@@ -13,7 +12,7 @@ export class MailingService {
         template: "verif-code",
         context: {
           username: user.username,
-          code: code,
+          verifyUrl: url,
         },
         attachments: [
           {
@@ -51,8 +50,7 @@ export class MailingService {
       });
   }
 
-  async sendNewUser(user: User): Promise<void> {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+  async sendNewUser(user: User, url: string): Promise<void> {
     await this.mailerService
       .sendMail({
         to: user.email,
@@ -60,7 +58,7 @@ export class MailingService {
         template: "new-user",
         context: {
           username: user.username,
-          code: code,
+          verifyUrl: url,
         },
         attachments: [
           {
