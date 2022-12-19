@@ -33,16 +33,16 @@ export class AuthService {
   async createAccessToken(user) {
     const payload: JwtPayload = { id: user.id };
     return this.jwtService.signAsync(payload, {
-      secret: this.configService.get("ACCESS_TOKEN_SECRET"),
-      expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRATION"),
+      secret: this.configService.get("jwt.access_token_secret"),
+      expiresIn: this.configService.get("jwt.access_token_expiration"),
     });
   }
 
   async createRefreshToken(user) {
     const payload: JwtPayload = { id: user.id };
     return this.jwtService.signAsync(payload, {
-      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
-      expiresIn: this.configService.get("REFRESH_TOKEN_EXPIRATION"),
+      secret: this.configService.get("jwt.refresh_token_secret"),
+      expiresIn: this.configService.get("jwt.refresh_token_expiration"),
     });
   }
 
@@ -59,13 +59,13 @@ export class AuthService {
     return { accessToken };
   }
 
-  async refreshToken(request, response) {
+  async refreshToken(request) {
     const refreshToken = request.cookies.refreshToken;
     if (!refreshToken) {
       throw new UnauthorizedException("refresh_token_not_provided");
     }
     const payload = await this.jwtService.verifyAsync(refreshToken, {
-      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
+      secret: this.configService.get("jwt.refresh_token_secret"),
     });
     const user = await this.userService.getUserById(payload.id);
     const decryptedRefreshToken = await utils.decrypt(
@@ -73,7 +73,6 @@ export class AuthService {
       user.refreshToken,
     );
     if (decryptedRefreshToken) {
-      response.status(200);
       return {
         accessToken: await this.createAccessToken(user),
       };
@@ -88,19 +87,18 @@ export class AuthService {
       throw new UnauthorizedException("refresh_token_not_provided");
     }
     const payload = await this.jwtService.verifyAsync(refreshToken, {
-      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
+      secret: this.configService.get("jwt.refresh_token_secret"),
     });
     await this.userService.removeRefreshToken(payload.id);
     response.clearCookie("refreshToken");
-    response.status(200);
     return { message: "success" };
   }
 
   async googleAuth(token, response) {
-    const client = new OAuth2Client(this.configService.get("GOOGLE_CLIENT_ID"));
+    const client = new OAuth2Client(this.configService.get("google.client_id"));
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: this.configService.get("GOOGLE_CLIENT_ID"),
+      audience: this.configService.get("google.client_id"),
     });
     const payload = ticket.getPayload();
     if (!payload) {

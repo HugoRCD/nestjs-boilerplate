@@ -23,7 +23,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getCurrentUser(@CurrentUser() user: JwtPayload) {
+  async getCurrentUser(@CurrentUser() user: JwtPayload) {
     return this.userService.getUserById(user.id);
   }
 

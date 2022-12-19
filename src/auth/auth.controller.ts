@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, Res } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+} from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
@@ -28,14 +36,16 @@ export class AuthController {
     return this.authService.getTokens(user, response);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post("logout")
   async logout(@Req() request: Request, @Res({ passthrough: true }) response) {
     return this.authService.logout(request, response);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post("refresh")
-  async refresh(@Req() request: Request, @Res({ passthrough: true }) response) {
-    return this.authService.refreshToken(request, response);
+  async refresh(@Req() request: Request) {
+    return this.authService.refreshToken(request);
   }
 
   @Post("google")

@@ -25,7 +25,7 @@ export class ResetPasswordService {
     const reset = this.resetRepository.create({ email, token });
     await this.resetRepository.save(reset);
     const resetUrl = `${this.configService.get(
-      "FRONTEND_URL",
+      "frontend_url",
     )}/reset-password/${token}`;
     await this.mailingService.sendResetPassword(user, resetUrl);
     return {

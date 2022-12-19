@@ -17,9 +17,9 @@ import { JwtPayload } from "../auth/auth.service";
 import { TicketCreateInput } from "./dto/ticket-create.input";
 import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Ticket")
 @Roles(Role.ADMIN)
 @UseGuards(JwtAuthGuard, RoleGuard)
-@ApiTags("Ticket")
 @Controller("ticket")
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
@@ -34,6 +34,7 @@ export class TicketController {
     return this.ticketService.getTicket(id);
   }
 
+  @Roles(Role.USER)
   @Post()
   async createTicket(
     @Body() ticket: TicketCreateInput,

@@ -4,16 +4,10 @@ import { ResetPasswordController } from "./reset-password.controller";
 import { Reset } from "./entities/reset.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "../user/user.module";
-import { ConfigModule } from "@nestjs/config";
 import { MailingModule } from "../mailing/mailing.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Reset]),
-    UserModule,
-    ConfigModule,
-    MailingModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Reset]), UserModule, MailingModule],
   providers: [ResetPasswordService],
   controllers: [ResetPasswordController],
 })

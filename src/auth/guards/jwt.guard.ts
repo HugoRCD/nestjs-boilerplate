@@ -19,14 +19,9 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      return true;
-    }
-    if (super.canActivate(context)) {
-      return true;
-    } else {
-      throw new UnauthorizedException("unauthorized_access");
-    }
+    if (isPublic) return true;
+    if (super.canActivate(context)) return true;
+    else throw new UnauthorizedException("unauthorized_access");
   }
 
   handleRequest(err, user, info) {

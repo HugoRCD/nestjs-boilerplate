@@ -2,9 +2,9 @@
   "name": "nestjs-boilerplate",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Hugo Richard",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT License",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

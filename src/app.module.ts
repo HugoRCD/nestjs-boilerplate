@@ -10,11 +10,16 @@ import { AuthModule } from "./auth/auth.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
 import { DatabaseModule } from "./database/database.module";
 import { TicketModule } from "./ticket/ticket.module";
+import { config } from "../config";
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      load: [config],
+    }),
     DatabaseModule,
     UserModule,
     MailingModule,

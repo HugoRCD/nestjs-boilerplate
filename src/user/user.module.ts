@@ -5,14 +5,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { MailingModule } from "../mailing/mailing.module";
 import { VerifCode } from "./entities/verif-code.entity";
-import { ConfigModule } from "@nestjs/config";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, VerifCode]),
-    MailingModule,
-    ConfigModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User, VerifCode]), MailingModule],
   controllers: [UserController],
   providers: [UserService, User],
   exports: [UserService],
