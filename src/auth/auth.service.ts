@@ -68,7 +68,7 @@ export class AuthService {
       secret: this.configService.get("REFRESH_TOKEN_SECRET"),
     });
     const user = await this.userService.getUserById(payload.id);
-    const decryptedRefreshToken = utils.decrypt(
+    const decryptedRefreshToken = await utils.decrypt(
       refreshToken,
       user.refreshToken,
     );
@@ -77,8 +77,9 @@ export class AuthService {
       return {
         accessToken: await this.createAccessToken(user),
       };
+    } else {
+      throw new UnauthorizedException("invalid_refresh_token");
     }
-    throw new UnauthorizedException("invalid_refresh_token");
   }
 
   async logout(request, response) {

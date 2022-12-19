@@ -6,7 +6,7 @@ export const utils = {
     return bcrypt.hash(ToHash, saltRounds);
   },
 
-  decrypt(ToDeHash: string, Hash: string) {
+  async decrypt(ToDeHash: string, Hash: string) {
     return bcrypt.compare(ToDeHash, Hash);
   },
 };

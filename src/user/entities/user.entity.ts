@@ -34,7 +34,7 @@ export class User {
   password: string;
 
   @Exclude({ toPlainOnly: true })
-  @Column({ length: 600, nullable: true, select: false })
+  @Column({ length: 600, nullable: true })
   refreshToken: string;
 
   @Column({ default: Role.USER })

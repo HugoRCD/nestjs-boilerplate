@@ -36,7 +36,7 @@ export class UserService {
       password: hashedPassword,
     });
     await this.userRepository.save(user);
-    const url = await this.createVerificationUrl(user.email, false);
+    const url = await this.createVerificationUrl(user.id, false);
     await this.mailingService.sendNewUser(user, url);
     return user;
   }
@@ -88,13 +88,13 @@ export class UserService {
     return { message: "user_deleted" };
   }
 
-  async createVerificationUrl(email: string, sendMail: boolean) {
+  async createVerificationUrl(id: number, sendMail: boolean) {
+    const user = await this.userRepository.findOne({ where: { id: id } });
     const verif_code = new VerifCode();
-    verif_code.email = email;
+    verif_code.email = user.email;
     verif_code.code = Math.floor(100000 + Math.random() * 900000).toString();
     const verifCode = this.verifCodeRepository.create(verif_code);
     await this.verifCodeRepository.save(verifCode);
-    const user = await this.userRepository.findOne({ where: { email: email } });
     const verifyUrl = `${this.configService.get(
       "FRONTEND_URL",
     )}/account/verify/${verifCode.code}`;

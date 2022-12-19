@@ -11,10 +11,10 @@ import {
 import { UserService } from "./user.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { CurrentUser, JwtAuthGuard } from "../auth/guards/jwt.guard";
-import { User } from "./entities/user.entity";
 import { RoleGuard } from "../auth/guards/role.guard";
 import { Role, Roles } from "../auth/decorators/role.decorator";
 import { ApiTags } from "@nestjs/swagger";
+import { JwtPayload } from "../auth/auth.service";
 
 @ApiTags("User")
 @UseGuards(JwtAuthGuard, RoleGuard)
@@ -23,7 +23,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getCurrentUser(@CurrentUser() user: User) {
+  async getCurrentUser(@CurrentUser() user: JwtPayload) {
     return this.userService.getUserById(user.id);
   }
 
@@ -39,15 +39,18 @@ export class UserController {
   }
 
   @Post("verify")
-  async sendNewToken(@Body("email") email: string) {
-    await this.userService.createVerificationUrl(email, true);
+  async sendNewToken(@CurrentUser() user: JwtPayload) {
+    await this.userService.createVerificationUrl(user.id, true);
     return {
       message: "new_token_sent",
     };
   }
 
   @Post("/verify/:token")
-  async verifyUser(@CurrentUser() user: User, @Param("token") token: string) {
+  async verifyUser(
+    @CurrentUser() user: JwtPayload,
+    @Param("token") token: string,
+  ) {
     return this.userService.verifyEmail(user.id, token);
   }
 
