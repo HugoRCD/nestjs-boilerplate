@@ -2,6 +2,7 @@ import {
   createParamDecorator,
   ExecutionContext,
   Injectable,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Reflector } from "@nestjs/core";
@@ -21,13 +22,21 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
     if (isPublic) {
       return true;
     }
-    return super.canActivate(context);
+    if (super.canActivate(context)) {
+      return true;
+    } else {
+      throw new UnauthorizedException("unauthorized_access");
+    }
   }
 }
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    return request.user;
+    if (request.user) {
+      return request.user;
+    } else {
+      throw new UnauthorizedException();
+    }
   },
 );
