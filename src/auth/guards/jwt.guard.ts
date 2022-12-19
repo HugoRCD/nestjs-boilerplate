@@ -28,6 +28,13 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       throw new UnauthorizedException("unauthorized_access");
     }
   }
+
+  handleRequest(err, user, info) {
+    if (err || !user || info) {
+      new UnauthorizedException();
+    }
+    return user;
+  }
 }
 
 export const CurrentUser = createParamDecorator(
