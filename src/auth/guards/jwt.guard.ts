@@ -23,13 +23,6 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
     if (super.canActivate(context)) return true;
     else throw new UnauthorizedException("unauthorized_access");
   }
-
-  handleRequest(err, user, info) {
-    if (err || !user || info) {
-      new UnauthorizedException();
-    }
-    return user;
-  }
 }
 
 export const CurrentUser = createParamDecorator(

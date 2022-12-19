@@ -6,12 +6,14 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
 import { Request } from "express";
 import { ApiTags } from "@nestjs/swagger";
+import { LocalGuard } from "./guards/local-auth.guard";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -26,6 +28,7 @@ export class AuthController {
     return this.userService.create(createUserDto);
   }
 
+  @UseGuards(LocalGuard)
   @Post("login")
   async login(
     @Body("login") login: string,
