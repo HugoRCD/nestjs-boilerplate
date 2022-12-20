@@ -27,6 +27,7 @@ export class TicketService {
       email: findUser.email,
     });
     await this.ticketRepository.save(newTicket);
+    return { message: "ticket_created" };
   }
 
   async getTickets() {

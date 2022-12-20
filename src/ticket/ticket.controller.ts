@@ -10,12 +10,13 @@ import {
 } from "@nestjs/common";
 import { TicketService } from "./ticket.service";
 import { RoleGuard } from "../auth/guards/role.guard";
-import { CurrentUser, JwtAuthGuard } from "../auth/guards/jwt.guard";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
 import { Role, Roles } from "../auth/decorators/role.decorator";
 import { TicketUpdateInput } from "./dto/ticket-update.input";
 import { JwtPayload } from "../auth/auth.service";
 import { TicketCreateInput } from "./dto/ticket-create.input";
 import { ApiTags } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator";
 
 @ApiTags("Ticket")
 @Roles(Role.ADMIN)
@@ -34,7 +35,7 @@ export class TicketController {
     return this.ticketService.getTicket(id);
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.ADMIN, Role.USER)
   @Post()
   async createTicket(
     @Body() ticket: TicketCreateInput,

@@ -1,12 +1,7 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { ExecutionContext, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Reflector } from "@nestjs/core";
-import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
@@ -14,24 +9,14 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const isPublic = this.reflector.getAllAndOverride("isPublic", [
       context.getHandler(),
       context.getClass(),
     ]);
     if (isPublic) return true;
-    if (super.canActivate(context)) return true;
-    else throw new UnauthorizedException("unauthorized_access");
+    return super.canActivate(context);
   }
 }
-
-export const CurrentUser = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    if (request.user) {
-      return request.user;
-    } else {
-      throw new UnauthorizedException();
-    }
-  },
-);
