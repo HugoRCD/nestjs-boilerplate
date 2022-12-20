@@ -52,7 +52,7 @@ export class AuthService {
     await this.userService.insertRefreshToken(user.id, refreshToken);
     response
       .cookie("refreshToken", refreshToken, {
-        httpOnly: false,
+        httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .status(200);
