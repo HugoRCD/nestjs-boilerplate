@@ -25,4 +25,5 @@ export const config = () => ({
     },
   },
   frontend_url: process.env.FRONTEND_URL,
+  cookie_domain: process.env.COOKIE_DOMAIN,
 });
