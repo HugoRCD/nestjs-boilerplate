@@ -92,7 +92,11 @@ export class AuthService {
       secret: this.configService.get("jwt.refresh_token_secret"),
     });
     await this.userService.removeRefreshToken(payload.id);
-    response.clearCookie("refreshToken");
+    response.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     return { message: "success" };
   }
 
