@@ -115,7 +115,10 @@ export class AuthService {
       return this.getTokens(user, response);
     } else {
       const newUser = new User();
-      newUser.username = payload.given_name + " " + payload.family_name;
+      newUser.username =
+        payload.given_name +
+        payload.family_name +
+        Math.floor(Math.random() * 1000);
       newUser.email = payload.email;
       newUser.firstname = payload.given_name;
       newUser.lastname = payload.family_name;
