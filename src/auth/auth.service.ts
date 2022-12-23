@@ -123,6 +123,7 @@ export class AuthService {
       newUser.firstname = payload.given_name;
       newUser.lastname = payload.family_name;
       newUser.password = await utils.encrypt(token);
+      newUser.avatar = payload.picture;
       const createdUser = await this.userService.create(newUser);
       return this.getTokens(createdUser, response);
     }

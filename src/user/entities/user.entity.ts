@@ -44,6 +44,9 @@ export class User {
   @Column({ default: false })
   isVerified: boolean;
 
+  @Column({ default: null })
+  avatar: string;
+
   @Column({ default: false })
   @CreateDateColumn()
   createdAt: Date;
