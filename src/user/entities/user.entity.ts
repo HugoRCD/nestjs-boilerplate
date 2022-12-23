@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { IsAlpha, IsEmail } from "class-validator";
+import { IsAlpha, IsEmail, IsNotEmpty } from "class-validator";
 import { Role } from "../../auth/decorators/role.decorator";
 import { Exclude } from "class-transformer";
 
@@ -14,6 +14,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @IsNotEmpty()
   @Column({ unique: true })
   username: string;
 

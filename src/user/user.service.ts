@@ -64,7 +64,11 @@ export class UserService {
   }
 
   async getAllUsers() {
-    return this.userRepository.find();
+    return {
+      status: "success",
+      message: "users_found",
+      content: await this.userRepository.find(),
+    };
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto) {
@@ -72,7 +76,11 @@ export class UserService {
     if (!user) throw new BadRequestException("user_not_found");
     await this.userRepository.update(id, updateUserDto);
     const updatedUser = await this.userRepository.findOne({ where: { id } });
-    return { message: "user_updated", user: updatedUser };
+    return {
+      status: "success",
+      message: "user_updated",
+      content: { user: updatedUser },
+    };
   }
 
   async updatePassword(id: number, password: string) {
