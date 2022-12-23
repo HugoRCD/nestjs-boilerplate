@@ -71,7 +71,8 @@ export class UserService {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new BadRequestException("user_not_found");
     await this.userRepository.update(id, updateUserDto);
-    return { message: "user_updated" };
+    const updatedUser = await this.userRepository.findOne({ where: { id } });
+    return { message: "user_updated", user: updatedUser };
   }
 
   async updatePassword(id: number, password: string) {

@@ -45,6 +45,7 @@ export class ResetPasswordService {
     user.password = await utils.encrypt(password);
     await this.userService.updatePassword(user.id, user.password);
     await this.resetRepository.delete(reset.id);
+    await this.mailingService.sendResetPasswordSuccess(user);
     return {
       message: "password_reset",
     };

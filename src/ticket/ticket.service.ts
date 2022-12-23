@@ -27,6 +27,7 @@ export class TicketService {
       email: findUser.email,
     });
     await this.ticketRepository.save(newTicket);
+    await this.mailingService.sendTicketReceived(findUser, name);
     return { message: "ticket_created" };
   }
 
