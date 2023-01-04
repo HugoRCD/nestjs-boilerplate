@@ -1,0 +1,20 @@
+name: deploy to production v.2
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@5.2.1
+      with:
+        switches: -avzr --delete
+        path: src/
+        remote_path: /home/hugorcd/nuxt-app/api
+        remote_host: ${{ secrets.RASP_HOST }}
+        remote_user: ${{ secrets.RASP_USER }}
+        remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
