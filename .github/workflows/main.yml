@@ -1,0 +1,44 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn install
+      - name: Build the application
+        run: yarn build
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn install
+      - name: Build the application
+        run: yarn build
+      - name: Stop running container on Raspberry Pi
+        uses: docker-cli/action@v1
+        with:
+          args: stop nuxt-app
+      - name: Transfer code to Raspberry Pi
+        uses: appleboy/rsync-action@master
+        with:
+          host: ${{secrets.RASP_HOST}}
+          username: ${{secrets.RASP_USER}}
+          password: ${{secrets.RASP_PASSWORD}}
+          port: ${{secrets.RASP_PORT}}
+          source: .
+          target: /home/${{secrets.RASP_USER}}/nuxt-app/api
+      - name: Start container on Raspberry Pi
+        uses: docker-cli/action@v1
+        with:
+          args: start nuxt-app
+      - name: Test the application
+        run: yarn test
