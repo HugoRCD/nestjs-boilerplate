@@ -17,4 +17,5 @@ jobs:
         remote_path: /home/hugorcd/nuxt-app/api
         remote_host: ${{ secrets.RASP_HOST }}
         remote_user: ${{ secrets.RASP_USER }}
+        remote_port: ${{ secrets.RASP_PORT }}
         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
