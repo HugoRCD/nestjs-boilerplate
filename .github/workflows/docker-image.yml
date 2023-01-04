@@ -1,3 +1,5 @@
+#!/bin/bash
+
 name: Build and push Docker image
 
 on:
