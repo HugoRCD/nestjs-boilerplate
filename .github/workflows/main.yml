@@ -20,7 +20,7 @@ jobs:
           known_hosts: unnecessary
 
       - name: Adding Known Hosts
-        run: ssh-keyscan -p ${{ secrets.RASP_PORT}} -H ${{ secrets.RASP_HOST }}  >> ~/.ssh/known_hosts
+        run: ssh-keyscan -p ${{ secrets.RASP_PORT}} -H ${{ secrets.RASP_HOST }}  >> ~/deploy-key/known_hosts
 
       - name: Deploy with rsync
         run: rsync -avz -e "ssh -p ${{ secrets.RASP_PORT }}" ./dist/ ${{ secrets.RASP_USER }}@${{ secrets.RASP_HOST }}:/home/hugorcd/
