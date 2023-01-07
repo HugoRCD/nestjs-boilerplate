@@ -14,6 +14,13 @@ export interface JwtPayload {
   id: number;
 }
 
+interface GooglePayload {
+  email: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -102,28 +109,25 @@ export class AuthService {
 
   async googleAuth(token, response) {
     const client = new OAuth2Client(this.configService.get("google.client_id"));
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: this.configService.get("google.client_id"),
+    client.setCredentials({ access_token: token });
+    const googleUser = await client.request({
+      url: "https://www.googleapis.com/oauth2/v3/userinfo",
     });
-    const payload = ticket.getPayload();
-    if (!payload) {
-      throw new UnauthorizedException("invalid_google_token");
-    }
-    const user = await this.userService.getUserByLogin(payload.email);
+    const userInfo = googleUser.data as GooglePayload;
+    const user = await this.userService.getUserByLogin(userInfo.email);
     if (user) {
       return this.getTokens(user, response);
     } else {
       const newUser = new User();
       newUser.username =
-        payload.given_name +
-        payload.family_name +
+        userInfo.given_name +
+        userInfo.family_name +
         Math.floor(Math.random() * 1000);
-      newUser.email = payload.email;
-      newUser.firstname = payload.given_name;
-      newUser.lastname = payload.family_name;
+      newUser.email = userInfo.email;
+      newUser.firstname = userInfo.given_name;
+      newUser.lastname = userInfo.family_name;
       newUser.password = await utils.encrypt(token);
-      newUser.avatar = payload.picture;
+      newUser.avatar = userInfo.picture;
       const createdUser = await this.userService.create(newUser);
       return this.getTokens(createdUser, response);
     }
