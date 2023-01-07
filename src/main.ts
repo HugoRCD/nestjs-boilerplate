@@ -10,12 +10,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.enableCors({
-    origin: "*",
-    /*[
+    origin: [
       "http://localhost:8080",
       "http://localhost:3000",
-      "https://vuejs-frontend-template.herokuapp.com",
-    ],*/
+      "https://nuxtapp.hrcd.fr",
+    ],
     credentials: true,
   });
   const config = new DocumentBuilder()
