@@ -14,6 +14,7 @@ async function bootstrap() {
       "http://localhost:8080",
       "http://localhost:3000",
       "https://nuxtapp.hrcd.fr",
+      "https://nuxtapp.maisonhochard.com",
     ],
     credentials: true,
   });
