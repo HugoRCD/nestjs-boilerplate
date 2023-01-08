@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: ["http://localhost:8080", process.env.FRONTEND_URL],
     credentials: true,
   });
   const config = new DocumentBuilder()
