@@ -106,7 +106,7 @@ export class UserService {
     await this.verifCodeRepository.save(verifCode);
     const verifyUrl = `${this.configService.get(
       "frontend_url",
-    )}/account/verify/${verifCode.code}`;
+    )}/app/confirm-account-${verifCode.code}`;
     if (sendMail) {
       await this.mailingService.sendNewVerification(user, verifyUrl);
     }
