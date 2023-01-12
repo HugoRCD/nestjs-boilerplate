@@ -37,7 +37,7 @@
     "@types/passport-local": "^1.0.34",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "google-auth-library": "^8.7.0",
     "mysql": "^2.18.1",
